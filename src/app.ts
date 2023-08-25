@@ -3,10 +3,8 @@ import cors from "cors";
 require('express-async-errors');
 import { createServer, Server as HTTPServer } from 'http';
 import { FRONTEND_URL } from "./util/config";
-import { Server as SocketIOServer} from "socket.io"
-import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData, RTCSessionDescriptionInit } from "./types";
-
-const usersPerRoom = 3;
+import { Server, Server as SocketIOServer} from "socket.io"
+import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData } from "./types";
 
 export const app = express();
 
@@ -16,8 +14,6 @@ app.get("/", (req, res) => {
     res.send(`<h1>Hello World</h1>`); 
 });
 
-
-const roomHost = new Map<string,string>();
 
 export const httpServer = createServer(app);
 export const io  = new SocketIOServer<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(httpServer, {
@@ -36,65 +32,33 @@ io.on("connection", async (socket) => {
         room = id;
     }
 
-    const rooms = io.of("/").adapter.rooms;
-    if(!rooms.has(room)) {
-        // new room created
-        socket.join(room);
-        roomHost.set(room, socket.id);
-        socket.emit("created", roomHost.get(room) || '');
-    } else {
-        let existingRoom = rooms.get(room);
+    // room
 
-        if( existingRoom && existingRoom.size <= usersPerRoom ) {
-            // join existing room
-            let hostId = roomHost.get(room);
-            if(!hostId) {
-                console.log(`Room ${existingRoom} has no hostId when room joined.`)
-                hostId = '';
-            }
-            socket.join(room);
-            socket.emit("joined", hostId)
-        } else {
-            // room full
-            socket.emit("full")
-        }
-    }
+    socket.join(room);
 
-    socket.on("ready", (fromSocketId) => {
-        console.log(`Socket ${fromSocketId} is ready.`)
-        socket.broadcast.to(room).emit("ready", fromSocketId);
-    });
+    // webRTC
 
-    socket.on("ice-candidate", (fromSocketId, candidate) => {
-        console.log(`ICE candidate:`);
-        console.log(candidate)
-        socket.broadcast.to(room).emit("ice-candidate", fromSocketId, candidate);
-    })
-
-    socket.on("offer", (fromSocketId, offer: RTCSessionDescriptionInit) => {
+    socket.on("offer", (fromSocketId, toSocketId, offer ) => {
         console.log(`Offer received`);
-        socket.broadcast.to(room).emit("offer", fromSocketId, offer);
+        socket.broadcast.to(toSocketId).emit("offer", fromSocketId,toSocketId, offer);
     })
 
-    socket.on("answer", (fromSocketId, answer: RTCSessionDescriptionInit) => {
+    socket.on("answer", (fromSocketId, toSocketId, answer) => {
         console.log(`Answer received`);
-        socket.broadcast.to(room).emit("answer", fromSocketId, answer);
+        socket.broadcast.to(toSocketId).emit("answer", fromSocketId, toSocketId, answer);
     })
 
-    socket.on("disconnect", (reason) => {
-        // socket is automatically removed from room on disconnect
-        console.log(`Socket disconnected`)
+    socket.on("ice-candidate", (fromSocketId, toSocketId, candidate) => {
+        console.log(`ICE candidate:`);
+        socket.broadcast.to(toSocketId).emit("ice-candidate", fromSocketId, toSocketId, candidate);
     })
 
-    socket.on("leave", (fromSocketId: string) => {
-        console.log(`Socket left room, emitted "leave"`);
-        socket.broadcast.to(room).emit("leave", fromSocketId)
-    })
+    // chat
 
-    socket.on("message", (fromSocketId, message: string) => {
+    socket.on("message", (fromSocketId, message: string, time: number) => {
         // not-broadcasted, sender also receives their own message
         console.log(`Socket ${fromSocketId} sent a message.`)
-        io.to(room).emit("message", fromSocketId, message);
+        io.to(room).emit("message", fromSocketId, message, time);
     });
 
 })
@@ -110,8 +74,26 @@ io.of("/").adapter.on("delete-room", (room) => {
 
 io.of("/").adapter.on("join-room", (room, id) => {
     console.log(`socket ${id} has joined room ${room}`);
+    updateRoomUsers(io, room);
 });
 
 io.of("/").adapter.on("leave-room", (room, id) => {
     console.log(`socket ${id} has left the room ${room}`);
+    updateRoomUsers(io, room);
 });
+
+
+// update list of connected users to the given room
+function updateRoomUsers(io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, room: string) {
+    const rooms = io.of("/").adapter.rooms;
+    const existingRoom = rooms.get(room);
+
+    if(existingRoom) {
+        const users : string[] = [];
+        existingRoom.forEach((userIdInRoom) => {
+            users.push(userIdInRoom);
+        })
+
+        io.to(room).emit('room-users', users);
+    }
+}
