@@ -6,9 +6,12 @@ import { FRONTEND_URL } from "./util/config";
 import { Server, Server as SocketIOServer} from "socket.io"
 import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData } from "./types";
 
+import { roomRouter } from "./controllers/room";
+
 export const app = express();
 
 app.use(cors())
+app.use('/api/room', roomRouter)
 
 app.get("/", (req, res) => {
     res.send(`<h1>Hello World</h1>`); 
@@ -83,7 +86,7 @@ io.of("/").adapter.on("leave-room", (room, id) => {
 });
 
 
-// update list of connected users to the given room
+// update list of users connected to the given room
 function updateRoomUsers(io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, room: string) {
     const rooms = io.of("/").adapter.rooms;
     const existingRoom = rooms.get(room);
