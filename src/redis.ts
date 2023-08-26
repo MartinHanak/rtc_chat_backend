@@ -49,7 +49,18 @@ export class RedisService {
         return roomEntity[EntityId];
     }
 
+    async getAllRooms() {
+        const rooms = await this._roomRepository.search()
+        .return.all();
+
+        return rooms;
+    }
+
     async getRoomsOfType(type: string) {
+
+        if(!isValidRoomType(type)) {
+            type = roomType.video;
+        }
 
         const rooms = await this._roomRepository.search()
         .where('type').equals(type)
@@ -75,6 +86,8 @@ export class RedisService {
         if(room && room[EntityId]) {
             const idToRemove = room[EntityId];
             await this._roomRepository.remove(idToRemove);
+        } else {
+            throw new Error(`No room ${name} found.`)
         }
     }
 
