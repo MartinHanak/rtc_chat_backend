@@ -7,13 +7,15 @@ import { Server, Server as SocketIOServer} from "socket.io"
 import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData } from "./types";
 
 import { roomRouter } from "./controllers/room";
+import { roomSSERouter } from "./controllers/roomSSE";
 
 export const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/room', roomRouter)
+app.use('/api/room', roomRouter);
+app.use('/api/roomSSE', roomSSERouter);
 
 app.get("/", (req, res) => {
     res.send(`<h1>Hello World</h1>`); 
@@ -54,7 +56,6 @@ io.on("connection", async (socket) => {
     })
 
     socket.on("ice-candidate", (fromSocketId, toSocketId, candidate) => {
-        console.log(`ICE candidate:`);
         socket.broadcast.to(toSocketId).emit("ice-candidate", fromSocketId, toSocketId, candidate);
     })
 
@@ -92,13 +93,14 @@ io.of("/").adapter.on("leave-room", (room, id) => {
 function updateRoomUsers(io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, room: string) {
     const rooms = io.of("/").adapter.rooms;
     const existingRoom = rooms.get(room);
-
+    
     if(existingRoom) {
         const users : string[] = [];
         existingRoom.forEach((userIdInRoom) => {
             users.push(userIdInRoom);
         })
-
+        console.log(`NEW USERS`)
+        console.log(users)
         io.to(room).emit('room-users', users);
     }
 }

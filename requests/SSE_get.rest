@@ -1,0 +1,2 @@
+GET http://localhost:5000/api/roomSSE
+Content-Type: application/json

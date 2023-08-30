@@ -9,7 +9,7 @@ export const roomSchema = new Schema('room', {
 export enum roomType  {
     video = 'video',
     audio = 'audio',
-    chat = 'chat'
+    text = 'text'
 }
 
 export function isValidRoomType(input: string): input is roomType {

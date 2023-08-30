@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { FRONTEND_URL } from './util/config';
-import { RedisService } from './redis';
+import { RedisService } from './services/redis';
 import { httpServer } from './app';
 
 const PORT = 5000;

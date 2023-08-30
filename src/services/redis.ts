@@ -1,6 +1,7 @@
 import { createClient } from "redis";
 import { EntityId, Repository, Entity } from "redis-om";
-import { isValidRoomType, roomSchema, roomType } from "./schemas/RoomSchema";
+import { isValidRoomType, roomSchema, roomType } from "../schemas/RoomSchema";
+import { notifySubscribers } from "../controllers/roomSSE";
 
 export class RedisService {
 
@@ -44,7 +45,8 @@ export class RedisService {
         }
 
         // returns copy with new properties like id
-        let roomEntity = await this._roomRepository.save(room)
+        let roomEntity = await this._roomRepository.save(room);
+        await notifySubscribers();
 
         return roomEntity[EntityId];
     }
@@ -86,6 +88,7 @@ export class RedisService {
         if(room && room[EntityId]) {
             const idToRemove = room[EntityId];
             await this._roomRepository.remove(idToRemove);
+            await notifySubscribers();
         } else {
             throw new Error(`No room ${name} found.`)
         }
