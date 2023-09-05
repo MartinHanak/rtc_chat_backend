@@ -1,2 +1,2 @@
-DELETE http://localhost:5000/api/room/sth
+DELETE http://localhost:5000/api/room/sth%202
 Content-Type: application/json

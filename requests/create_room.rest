@@ -2,6 +2,6 @@ POST http://localhost:5000/api/room
 Content-Type: application/json
 
 {
-    "name": "sth 2",
-    "type": "audio"
+    "name": "sth 4",
+    "type": "video"
 }
