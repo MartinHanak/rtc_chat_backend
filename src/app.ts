@@ -13,6 +13,7 @@ import {
 
 import { roomRouter } from "./controllers/room";
 import { roomSSERouter } from "./controllers/roomSSE";
+import { RedisSession } from ".";
 
 export const app = express();
 
@@ -92,6 +93,7 @@ io.of("/").adapter.on("create-room", (room) => {
 
 io.of("/").adapter.on("delete-room", (room) => {
   console.log(`room ${room} was deleted`);
+  RedisSession.deleteRoom(room);
 });
 
 io.of("/").adapter.on("join-room", (room, id) => {
