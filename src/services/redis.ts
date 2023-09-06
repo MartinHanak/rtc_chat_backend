@@ -2,11 +2,13 @@ import { createClient } from "redis";
 import { EntityId, Repository, Entity } from "redis-om";
 import { isValidRoomType, roomSchema, roomType } from "../schemas/RoomSchema";
 import { notifySubscribers } from "../controllers/roomSSE";
+import { userSchema } from "../schemas/UserSchema";
 
 export class RedisService {
   private _client: any;
 
   private _roomRepository: Repository;
+  private _userRepository: Repository;
 
   constructor() {
     // Connect to localhost on port 6379
@@ -17,6 +19,7 @@ export class RedisService {
 
     // repositories
     this._roomRepository = new Repository(roomSchema, this._client);
+    this._userRepository = new Repository(userSchema, this._client);
   }
 
   async connectToDatabase() {
@@ -24,7 +27,10 @@ export class RedisService {
 
     // create indexes for all repositories
     // only called if schema changed
-    const indexPromises = Promise.all([this._roomRepository.createIndex()]);
+    const indexPromises = Promise.all([
+      this._roomRepository.createIndex(),
+      this._userRepository.createIndex(),
+    ]);
 
     return indexPromises;
   }
@@ -91,5 +97,31 @@ export class RedisService {
     } else {
       console.log(`No room ${name} found.`);
     }
+  }
+
+  async getUsername(socketId: string) {
+    const user = await this._userRepository
+      .search()
+      .where("socketId")
+      .equals(socketId)
+      .return.first();
+
+    if (user && typeof user.username === "string") {
+      return user.username;
+    } else {
+      console.log(`No username found for the socket ${socketId}.`);
+      return socketId;
+    }
+  }
+
+  async saveUsername(socketId: string, username: string) {
+    let user = {
+      socketId,
+      username,
+    };
+
+    let userEntity = await this._userRepository.save(user);
+
+    return userEntity;
   }
 }

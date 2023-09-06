@@ -9,6 +9,7 @@ import {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
+  userInfo,
 } from "./types";
 
 import { roomRouter } from "./controllers/room";
@@ -44,15 +45,21 @@ io.on("connection", async (socket) => {
   let username = socket.handshake.headers.username as string;
   let id = socket.id;
 
-  if (!(room && typeof room === "string" && !Array.isArray(room))) {
+  if (
+    !(room && typeof room === "string" && !Array.isArray(room)) ||
+    !(username && typeof username === "string" && !Array.isArray(username))
+  ) {
     // Socket.io makes socket join rooms identified by socket.id by default
     // good fallback value
     room = id;
+    username = id;
   }
 
-  // room
-  console.log(`user ${username} joined the room ${room}`);
+  // save user-selected username
+  await RedisSession.saveUsername(id, username);
 
+  // join room
+  console.log(`user ${username} joined the room ${room}`);
   socket.join(room);
 
   // webRTC
@@ -107,7 +114,7 @@ io.of("/").adapter.on("leave-room", (room, id) => {
 });
 
 // update list of users connected to the given room
-function updateRoomUsers(
+async function updateRoomUsers(
   io: Server<
     ClientToServerEvents,
     ServerToClientEvents,
@@ -120,11 +127,14 @@ function updateRoomUsers(
   const existingRoom = rooms.get(room);
 
   if (existingRoom) {
-    const users: string[] = [];
-    existingRoom.forEach((userIdInRoom) => {
-      users.push(userIdInRoom);
-    });
-    console.log(`NEW USERS`);
+    const users: userInfo[] = [];
+    // looping set = guarantee that order of users = insertion order
+    for (const userSocketId of existingRoom) {
+      const username = await RedisSession.getUsername(userSocketId);
+      const socketId = userSocketId;
+      users.push({ username, socketId });
+    }
+
     console.log(users);
     io.to(room).emit("room-users", users);
   }
