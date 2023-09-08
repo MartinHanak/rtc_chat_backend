@@ -41,7 +41,7 @@ export const io = new SocketIOServer<
 });
 
 io.on("connection", async (socket) => {
-  let room = socket.handshake.headers.room as string;
+  let room = decodeURIComponent(socket.handshake.headers.room as string);
   let username = socket.handshake.headers.username as string;
   let id = socket.id;
 
@@ -132,7 +132,9 @@ async function updateRoomUsers(
     for (const userSocketId of existingRoom) {
       const username = await RedisSession.getUsername(userSocketId);
       const socketId = userSocketId;
-      users.push({ username, socketId });
+      if (username) {
+        users.push({ username, socketId });
+      }
     }
 
     console.log(users);

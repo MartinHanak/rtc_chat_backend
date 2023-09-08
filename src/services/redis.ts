@@ -110,7 +110,7 @@ export class RedisService {
       return user.username;
     } else {
       console.log(`No username found for the socket ${socketId}.`);
-      return socketId;
+      return null;
     }
   }
 
