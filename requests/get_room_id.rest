@@ -1,2 +1,2 @@
-GET http://localhost:5000/api/room/sth
+GET http://localhost:5000/api/room/sth%2053
 Content-Type: application/json

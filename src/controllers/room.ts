@@ -30,6 +30,7 @@ roomRouter.get("/:id", async (req, res) => {
 roomRouter.post("/", async (req, res) => {
   const name = req.body.name;
   const type = req.body.type;
+  const description = req.body.description ? req.body.description : "";
 
   const existingRoom = await RedisSession.getRoomByName(name);
 
@@ -41,14 +42,12 @@ roomRouter.post("/", async (req, res) => {
   }
 
   try {
-    const EntityId = await RedisSession.createRoom(name, type);
+    const EntityId = await RedisSession.createRoom(name, type, description);
     res.status(201).json({ EntityId: EntityId });
   } catch {
-    res
-      .status(500)
-      .json({
-        message: `Could not create room with name ${name} and type ${type}.`,
-      });
+    res.status(500).json({
+      message: `Could not create room with name ${name} and type ${type}.`,
+    });
   }
 });
 

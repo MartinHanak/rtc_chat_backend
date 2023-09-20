@@ -35,14 +35,15 @@ export class RedisService {
     return indexPromises;
   }
 
-  async createRoom(name: string, type: string) {
+  async createRoom(name: string, type: string, description: string = "") {
     if (!isValidRoomType(type)) {
       type = roomType.video;
     }
 
     let room = {
-      name: name,
+      name: decodeURIComponent(name),
       type: type,
+      description: description,
       createdAt: Date.now() / 1000, // in seconds
     };
 
