@@ -2,7 +2,7 @@ POST http://localhost:5000/api/room
 Content-Type: application/json
 
 {
-    "name": "sth 53",
-    "type": "video",
-    "description": "hello world"
+    "name": "terest",
+    "type": "audio",
+    "description": "fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas" 
 }
