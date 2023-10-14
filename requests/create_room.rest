@@ -2,7 +2,7 @@ POST http://localhost:5000/api/room
 Content-Type: application/json
 
 {
-    "name": "terest",
-    "type": "audio",
-    "description": "fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas" 
-}
+    "name": "tffdsrest",
+    "type": "video",
+    "description": "fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao daoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas"
+    }

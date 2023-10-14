@@ -31,6 +31,7 @@ roomRouter.post("/", async (req, res) => {
   const name = req.body.name;
   const type = req.body.type;
   const description = req.body.description ? req.body.description : "";
+  const privateRoom = req.body.privateRoom ? true : false;
 
   const existingRoom = await RedisSession.getRoomByName(name);
 
@@ -42,7 +43,12 @@ roomRouter.post("/", async (req, res) => {
   }
 
   try {
-    const EntityId = await RedisSession.createRoom(name, type, description);
+    const EntityId = await RedisSession.createRoom(
+      name,
+      type,
+      description,
+      privateRoom
+    );
     res.status(201).json({ EntityId: EntityId });
   } catch {
     res.status(500).json({

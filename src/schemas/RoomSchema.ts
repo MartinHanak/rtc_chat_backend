@@ -5,6 +5,7 @@ export const roomSchema = new Schema("room", {
   type: { type: "string" },
   description: { type: "text" },
   createdAd: { type: "date" },
+  privateRoom: { type: "boolean" },
 });
 
 export enum roomType {

@@ -35,7 +35,12 @@ export class RedisService {
     return indexPromises;
   }
 
-  async createRoom(name: string, type: string, description: string = "") {
+  async createRoom(
+    name: string,
+    type: string,
+    description: string = "",
+    privateRoom: boolean
+  ) {
     if (!isValidRoomType(type)) {
       type = roomType.video;
     }
@@ -45,6 +50,7 @@ export class RedisService {
       type: type,
       description: description,
       createdAt: Date.now() / 1000, // in seconds
+      privateRoom: privateRoom,
     };
 
     // returns copy with new properties like id
