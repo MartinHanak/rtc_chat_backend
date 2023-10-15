@@ -44,19 +44,22 @@ io.on("connection", async (socket) => {
   let room = decodeURIComponent(socket.handshake.headers.room as string);
   let username = socket.handshake.headers.username as string;
   let id = socket.id;
+  let color = socket.handshake.headers.color;
 
   if (
     !(room && typeof room === "string" && !Array.isArray(room)) ||
-    !(username && typeof username === "string" && !Array.isArray(username))
+    !(username && typeof username === "string" && !Array.isArray(username)) ||
+    Array.isArray(color)
   ) {
     // Socket.io makes socket join rooms identified by socket.id by default
     // good fallback value
     room = id;
     username = id;
+    color = undefined;
   }
 
   // save user-selected username
-  await RedisSession.saveUsername(id, username);
+  await RedisSession.saveUser(id, username, color);
 
   // join room
   console.log(`user ${username} joined the room ${room}`);
@@ -90,6 +93,22 @@ io.on("connection", async (socket) => {
     // not-broadcasted, sender also receives their own message
     console.log(`Socket ${fromSocketId} sent a message.`);
     io.to(room).emit("message", fromSocketId, message, time);
+  });
+
+  // user settings
+  socket.on("colorChange", (fromSocketId: string, newColor: string) => {
+    RedisSession.updateUserColor(fromSocketId, newColor)
+      .then(() => {
+        console.log(
+          `User ${fromSocketId} color updated successfully to ${newColor}`
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        updateRoomUsers(io, room);
+      });
   });
 });
 
@@ -130,11 +149,22 @@ async function updateRoomUsers(
     const users: userInfo[] = [];
     // looping set = guarantee that order of users = insertion order
     for (const userSocketId of existingRoom) {
-      const username = await RedisSession.getUsername(userSocketId);
-      const socketId = userSocketId;
-      if (username) {
-        users.push({ username, socketId });
+      const user = await RedisSession.getUser(userSocketId);
+
+      const userInfo: userInfo = {} as userInfo;
+      if (
+        user &&
+        typeof user.username === "string" &&
+        typeof user.socketId === "string"
+      ) {
+        userInfo.username = user.username;
+        userInfo.socketId = user.socketId;
       }
+      if (user && typeof user.color === "string") {
+        userInfo.color = user.color;
+      }
+
+      users.push(userInfo);
     }
 
     console.log(users);

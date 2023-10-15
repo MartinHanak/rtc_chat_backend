@@ -3,6 +3,7 @@ import { EntityId, Repository, Entity } from "redis-om";
 import { isValidRoomType, roomSchema, roomType } from "../schemas/RoomSchema";
 import { notifySubscribers } from "../controllers/roomSSE";
 import { userSchema } from "../schemas/UserSchema";
+import { userInfo } from "../types";
 
 export class RedisService {
   private _client: any;
@@ -106,7 +107,7 @@ export class RedisService {
     }
   }
 
-  async getUsername(socketId: string) {
+  async getUser(socketId: string) {
     const user = await this._userRepository
       .search()
       .where("socketId")
@@ -114,21 +115,42 @@ export class RedisService {
       .return.first();
 
     if (user && typeof user.username === "string") {
-      return user.username;
+      return user;
     } else {
-      console.log(`No username found for the socket ${socketId}.`);
+      console.log(`No user found for the socket id ${socketId}.`);
       return null;
     }
   }
 
-  async saveUsername(socketId: string, username: string) {
-    let user = {
+  async saveUser(socketId: string, username: string, color?: string) {
+    let user: Entity = {
       socketId,
       username,
     };
 
+    if (color) {
+      user.color = color;
+    }
+
     let userEntity = await this._userRepository.save(user);
 
     return userEntity;
+  }
+
+  async updateUserColor(socketId: string, color: string) {
+    let userEntity = await this._userRepository
+      .search()
+      .where("socketId")
+      .equals(socketId)
+      .return.first();
+
+    if (!userEntity) {
+      console.error(`User with the socketId: ${socketId} not found.`);
+      return;
+    }
+
+    userEntity.color = color;
+
+    return await this._userRepository.save(userEntity);
   }
 }

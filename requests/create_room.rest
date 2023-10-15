@@ -2,7 +2,8 @@ POST http://localhost:5000/api/room
 Content-Type: application/json
 
 {
-    "name": "tffdsrest",
+    "name": "test",
     "type": "video",
-    "description": "fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao daoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas fdajsoi doasfdiao afdaoi adso fdsjai saodi foasijd isofaji aiojas dio jaiojfdas"
+    "description": "fdajsoi doasfdiao afdaoi adso fdsjai saodi",
+    "privateRoom": "true"
     }
