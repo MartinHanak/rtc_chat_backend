@@ -137,7 +137,7 @@ export class RedisService {
     return userEntity;
   }
 
-  async updateUserColor(socketId: string, color: string) {
+  async updateUserInfo(socketId: string, newInfo: userInfo) {
     let userEntity = await this._userRepository
       .search()
       .where("socketId")
@@ -149,7 +149,9 @@ export class RedisService {
       return;
     }
 
-    userEntity.color = color;
+    for (const prop in newInfo) {
+      userEntity[prop] = newInfo[prop as keyof userInfo];
+    }
 
     return await this._userRepository.save(userEntity);
   }

@@ -96,20 +96,24 @@ io.on("connection", async (socket) => {
   });
 
   // user settings
-  socket.on("colorChange", (fromSocketId: string, newColor: string) => {
-    RedisSession.updateUserColor(fromSocketId, newColor)
-      .then(() => {
-        console.log(
-          `User ${fromSocketId} color updated successfully to ${newColor}`
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        updateRoomUsers(io, room);
-      });
-  });
+  socket.on(
+    "localSettingsChange",
+    (fromSocketId: string, newInfo: userInfo) => {
+      RedisSession.updateUserInfo(fromSocketId, newInfo)
+        .then(() => {
+          console.log(
+            `User ${fromSocketId} updated successfully to new userInfo`
+          );
+          console.log(newInfo);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          updateRoomUsers(io, room);
+        });
+    }
+  );
 });
 
 // room events provided by Socket.io

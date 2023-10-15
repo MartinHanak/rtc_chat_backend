@@ -1,7 +1,7 @@
 export interface userInfo {
   socketId: string;
   username: string;
-  color?: string;
+  color: string;
 }
 
 export interface ServerToClientEvents {
@@ -45,7 +45,7 @@ export interface ClientToServerEvents {
   message: (fromSocketId: string, message: string, time: number) => void;
 
   // user settings updates
-  colorChange: (fromSocketId: string, newColor: string) => void;
+  localSettingsChange: (fromSocketId: string, newInfo: userInfo) => void;
 }
 
 export interface InterServerEvents {}
