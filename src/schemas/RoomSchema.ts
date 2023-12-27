@@ -4,6 +4,7 @@ export const roomSchema = new Schema("room", {
   name: { type: "string" },
   type: { type: "string" },
   country: { type: "string" },
+  language: { type: "string" },
   description: { type: "text" },
   createdAd: { type: "date" },
   tags: { type: "string[]" },

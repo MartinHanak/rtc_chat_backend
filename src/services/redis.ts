@@ -40,6 +40,7 @@ export class RedisService {
     name: string,
     type: string,
     country: string,
+    language: string,
     description: string = "",
     tags: string[],
     privateRoom: boolean
@@ -52,6 +53,7 @@ export class RedisService {
       name: decodeURIComponent(name),
       type: type,
       country: country,
+      language: language,
       description: description,
       createdAt: Date.now() / 1000, // in seconds
       tags: tags,

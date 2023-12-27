@@ -2,8 +2,10 @@ POST http://localhost:5000/api/room
 Content-Type: application/json
 
 {
-    "name": "sfdsd s asfdsd",
-    "type": "video",
-    "description": "fdajsoi doasfdifdaoi adso fdsjai saodi",
+    "name": "sfddfs sd s asfdsd",
+    "type": "text",
+    "country": "Czech Republic",
+    "description": "fdajs dsaffd ada da dfasdaf das sdf saddsaoi  fdajs dsaffd ada da dfasdaf das sdf saddsaoi fdajs dsaffd ada da dfasdaf das sdf saddsaoi fdajs dsaffd ada da dfasdaf das sdf saddsaoi fdajs dsaffd ada da dfasdaf das sdf saddsaoidoasfdifdaoi adso fdsjai saodi",
+    "tags": ["test", "sport"],
     "privateRoom": false
-    }
+}

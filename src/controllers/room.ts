@@ -31,6 +31,7 @@ roomRouter.post("/", async (req, res) => {
   const name = req.body.name;
   const type = req.body.type;
   const country = req.body.country;
+  const language = req.body.language;
   const description = req.body.description ? req.body.description : "";
   const tags = req.body.tags;
   const privateRoom = req.body.privateRoom ? true : false;
@@ -49,6 +50,7 @@ roomRouter.post("/", async (req, res) => {
       name,
       type,
       country,
+      language,
       description,
       tags,
       privateRoom
