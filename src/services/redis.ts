@@ -39,7 +39,9 @@ export class RedisService {
   async createRoom(
     name: string,
     type: string,
+    country: string,
     description: string = "",
+    tags: string[],
     privateRoom: boolean
   ) {
     if (!isValidRoomType(type)) {
@@ -49,8 +51,10 @@ export class RedisService {
     let room = {
       name: decodeURIComponent(name),
       type: type,
+      country: country,
       description: description,
       createdAt: Date.now() / 1000, // in seconds
+      tags: tags,
       privateRoom: privateRoom,
     };
 

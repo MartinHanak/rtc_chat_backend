@@ -30,7 +30,9 @@ roomRouter.get("/:id", async (req, res) => {
 roomRouter.post("/", async (req, res) => {
   const name = req.body.name;
   const type = req.body.type;
+  const country = req.body.country;
   const description = req.body.description ? req.body.description : "";
+  const tags = req.body.tags;
   const privateRoom = req.body.privateRoom ? true : false;
 
   const existingRoom = await RedisSession.getRoomByName(name);
@@ -46,7 +48,9 @@ roomRouter.post("/", async (req, res) => {
     const EntityId = await RedisSession.createRoom(
       name,
       type,
+      country,
       description,
+      tags,
       privateRoom
     );
     res.status(201).json({ EntityId: EntityId });
