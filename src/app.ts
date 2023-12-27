@@ -123,6 +123,7 @@ io.of("/").adapter.on("create-room", (room) => {
 
 io.of("/").adapter.on("delete-room", (room) => {
   console.log(`room ${room} was deleted`);
+  // TODO: fix automatic room deletion
   RedisSession.deleteRoom(room);
 });
 

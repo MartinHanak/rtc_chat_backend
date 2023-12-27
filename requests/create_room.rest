@@ -2,8 +2,8 @@ POST http://localhost:5000/api/room
 Content-Type: application/json
 
 {
-    "name": "test",
+    "name": "sfdsd s asfdsd",
     "type": "video",
-    "description": "fdajsoi doasfdiao afdaoi adso fdsjai saodi",
-    "privateRoom": "true"
+    "description": "fdajsoi doasfdifdaoi adso fdsjai saodi",
+    "privateRoom": false
     }
